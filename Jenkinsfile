@@ -33,11 +33,10 @@ pipeline {
                         withCredentials([file(credentialsId: 'credentials3', variable: 'KUBECONFIG')]) {
                             sh '''
                                 export BUILD_NUMBER=$(cat ../build.txt)
-                                RELEASE_STATUS=$(helm status "release-$BUILD_NUMBER" --kubeconfig $KUBECONFIG --namespace $BRANCH_NAME >/dev/null 2>&1)
-                                if [ "RELEASE_STATUS" ]; then
-                                    helm upgrade "release-$BUILD_NUMBER" ./Deployment --values Deployment/${BRANCH_NAME}-branch-values.yaml --set image.tag=v$BUILD_NUMBER  --kubeconfig $KUBECONFIG --namespace $BRANCH_NAME
+                                if helm status "release-$BUILD_NUMBER" --kubeconfig $KUBECONFIG --namespace $BRANCH_NAME >/dev/null 2>&1; then
+                                    helm upgrade "release-$BUILD_NUMBER" ./Deployment --values Deployment/${BRANCH_NAME}-branch-values.yaml --set image.tag=v$BUILD_NUMBER --set service.name=myservice$BUILD_NUMBER --set deployment.name=bakehouse$BUILD_NUMBER --kubeconfig $KUBECONFIG --namespace $BRANCH_NAME
                                 else
-                                    helm install "release-$BUILD_NUMBER" ./Deployment --values Deployment/${BRANCH_NAME}-branch-values.yaml --set image.tag=v$BUILD_NUMBER  --kubeconfig $KUBECONFIG --namespace $BRANCH_NAME
+                                    helm install "release-$BUILD_NUMBER" ./Deployment --values Deployment/${BRANCH_NAME}-branch-values.yaml --set image.tag=v$BUILD_NUMBER --set service.name=myservice$BUILD_NUMBER --set deployment.name=bakehouse$BUILD_NUMBER --kubeconfig $KUBECONFIG --namespace $BRANCH_NAME
                                 fi
                             '''
                         }
@@ -47,7 +46,6 @@ pipeline {
         }  
     }   
 }
-
 // ###################################################################################################################################################################
 // #Jenkins_Lab2
 
