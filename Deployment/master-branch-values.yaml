@@ -1,0 +1,14 @@
+deployment:
+  name: bakehouse
+  replicas: 1
+  port: 80
+
+service:
+  name: myservice
+  type: NodePort
+  port: 80
+
+image:
+  repository: ahmedibrahimcs/bakehouse
+  tag: v1
+  pullPolicy: Always
