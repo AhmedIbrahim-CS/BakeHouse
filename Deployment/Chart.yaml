@@ -1,1 +1,4 @@
-
+apiVersion: v2
+name: bakehouse
+description: A Helm chart for deploying a bakehouse app
+version: 0.1.0
